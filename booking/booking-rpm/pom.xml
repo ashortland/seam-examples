@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  JBoss, Home of Professional Open Source
+  Copyright 2010, Red Hat Middleware LLC, and individual contributors
+  by the @authors tag. See the copyright.txt in the distribution for a
+  full listing of individual contributors.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+  http://www.apache.org/licenses/LICENSE-2.0
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+--> 
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.jboss.seam.examples</groupId>
+        <artifactId>seam-examples-parent</artifactId>
+        <version>3.2.0-SNAPSHOT</version>
+        <relativePath>../../pom.xml</relativePath>
+    </parent>
+
+    <groupId>org.jboss.seam.examples</groupId>
+    <artifactId>seam-booking-rpm</artifactId>
+    <packaging>rpm</packaging>
+    <name>Seam Booking Example RPM</name>
+    <description>The Seam booking example using the simplified Java EE 6 programming model and packaging structure (i.e., web archive)</description>
+    <url>http://seamframework.org/Seam3</url>
+
+    <properties>
+        <codehaus.plugin.rpm.version>2.1-alpha-2</codehaus.plugin.rpm.version>
+        <rpm.version>${project.version}</rpm.version>
+        <arch>noarch</arch>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.jboss.seam.examples</groupId>
+            <artifactId>seam-booking</artifactId>
+            <type>war</type>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+
+
+    <pluginManagement>
+      <plugins>
+
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>rpm-maven-plugin</artifactId>
+          <version>${codehaus.plugin.rpm.version}</version>
+          <extensions>true</extensions>
+          <configuration>
+            <copyright>XXX</copyright>
+            <group>YYY</group>
+            <needarch>noarch</needarch>
+            <preinstallScriptlet>
+              <scriptFile>src/main/scripts/preinstall.sh</scriptFile>
+              <fileEncoding>utf-8</fileEncoding>
+            </preinstallScriptlet>
+            <postinstallScriptlet>
+              <scriptFile>src/main/scripts/postinstall.sh</scriptFile>
+              <fileEncoding>utf-8</fileEncoding>
+            </postinstallScriptlet>
+            <preremoveScriptlet>
+              <scriptFile>src/main/scripts/preremove.sh</scriptFile>
+              <fileEncoding>utf-8</fileEncoding>
+            </preremoveScriptlet>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+
+
+          <plugins>
+             <plugin>
+                 <groupId>org.codehaus.mojo</groupId>
+                 <artifactId>rpm-maven-plugin</artifactId>
+                 <configuration>
+
+                   <!-- defaults to rpm.version property in properties section, may be overridden by external mvn property -->
+                   <version>${rpm.version}</version>
+  
+                   <!-- 
+                     if rpm.release is unset, it defaults to rpm release number to 1 for versioned releases and should be unset when SNAPSHOTS are used.
+                     if rpm.release is set, it will set the rpm release number as expected for a versioned release.   
+                     Do not set this property when a SNAPSHOT version is specified since the maven timestamping shall be used in this case, otherwise this behavior gets disabled 
+                     and mimics a versioned
+                     release.
+                     -->
+                   <release>${rpm.release}</release>
+  
+                   <!-- ensure package is noarch -->
+                   <needarch>${arch}</needarch>
+
+                   <mappings>
+                      <!-- map the apache proxy configuration -->
+                      <mapping>
+                         <directory>/usr/share/jboss-as/standalone/deployments</directory>
+                         <directoryIncluded>false</directoryIncluded>
+                         <dependency>
+                            <includes>
+                               <include>org.jboss.seam.examples:seam-booking</include>
+                            </includes>
+                         </dependency>
+                         <username>jboss-as</username>
+                         <groupname>jboss-as</groupname>
+                      </mapping>
+                   </mappings>
+                 </configuration>
+              </plugin>
+          </plugins>
+    </build>
+
+    <scm>
+        <connection>scm:git:git://github.com/seam/examples.git</connection>
+        <developerConnection>scm:git:git@github.com:seam/examples.git</developerConnection>
+        <url>http://github.com/seam</url>
+    </scm>
+
+</project>
