@@ -26,7 +26,6 @@
    <modules>
       <module>booking</module>
       <module>booking-rpm</module>
-<!--
       <module>timeanddate</module>
       <module>authorization</module>
       <module>simple</module>
@@ -34,7 +33,6 @@
       <module>idmconsole</module>
       <module>princess-rescue</module>
       <module>quiz</module>
--->
    </modules>
 
    <dependencyManagement>
